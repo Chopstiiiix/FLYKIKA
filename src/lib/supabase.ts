@@ -3,6 +3,7 @@ import { Preferences } from '@capacitor/preferences'
 
 const url = import.meta.env.VITE_SUPABASE_URL
 const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+export const hasSupabaseConfig = Boolean(url && anonKey)
 
 if (!url || !anonKey) {
   // Surfaced loudly so a missing .env.local is obvious in dev.
@@ -33,7 +34,10 @@ const capacitorStorage = {
   },
 }
 
-export const supabase = createClient(url ?? '', anonKey ?? '', {
+export const supabase = createClient(
+  url || 'https://placeholder.supabase.co',
+  anonKey || 'placeholder-anon-key',
+  {
   auth: {
     storage: capacitorStorage,
     persistSession: true,
@@ -41,4 +45,5 @@ export const supabase = createClient(url ?? '', anonKey ?? '', {
     // No URL-hash session detection — native has no redirect URL bar.
     detectSessionInUrl: false,
   },
-})
+  },
+)

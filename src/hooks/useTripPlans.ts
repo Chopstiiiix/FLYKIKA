@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { supabase } from '@/lib/supabase'
+import { hasSupabaseConfig, supabase } from '@/lib/supabase'
 import type { Plan, PlanInsert } from '@/types/plans'
 
 const plansKey = (tripId: string) => ['trips', tripId, 'plans'] as const
@@ -8,7 +8,7 @@ const plansKey = (tripId: string) => ['trips', tripId, 'plans'] as const
 export function useTripPlans(tripId: string | undefined) {
   return useQuery({
     queryKey: plansKey(tripId ?? ''),
-    enabled: !!tripId,
+    enabled: !!tripId && hasSupabaseConfig,
     queryFn: async (): Promise<Plan[]> => {
       const { data, error } = await supabase
         .from('plans')

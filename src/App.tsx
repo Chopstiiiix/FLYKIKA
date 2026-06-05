@@ -7,9 +7,11 @@ import { NewTrip } from '@/pages/NewTrip'
 import { TripDetail } from '@/pages/TripDetail'
 import { PlanEditor } from '@/pages/PlanEditor'
 import { MapView } from '@/pages/MapView'
+import { hasSupabaseConfig } from '@/lib/supabase'
 
 function RequireAuth({ children }: { children: JSX.Element }) {
   const { session, loading } = useAuth()
+  if (import.meta.env.DEV && !hasSupabaseConfig) return children
   if (loading) return <p className="p-6 text-slate-400">Loading…</p>
   if (!session) return <Navigate to="/auth" replace />
   return children
